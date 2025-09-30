@@ -35,15 +35,46 @@ class HomeController extends Controller
                 'show_logo' => true,
             ],
             'navigation' => [
-                'sign_in' => [
-                    'text' => 'Sign In',
-                    'url' => '/login',
-                    'variant' => 'outline'
+                'left_menu' => [
+                    [
+                        'text' => 'Home',
+                        'url' => '/',
+                        'variant' => 'ghost',
+                        'active' => true
+                    ],
+                    [
+                        'text' => 'Verify Ticket',
+                        'url' => '/verify-ticket',
+                        'variant' => 'ghost',
+                        'active' => false
+                    ],
+                    [
+                        'text' => 'Route Info',
+                        'url' => '/route-info',
+                        'variant' => 'ghost',
+                        'active' => false
+                    ]
                 ],
-                'get_started' => [
-                    'text' => 'Get Started',
-                    'url' => '/register',
-                    'variant' => 'default'
+                'right_menu' => [
+                    [
+                        'text' => 'Contact Us',
+                        'url' => '/contact',
+                        'variant' => 'ghost',
+                        'type' => 'special',
+                        'classes' => 'blink font-semibold text-blue-600'
+                    ],
+                    [
+                        'text' => 'Sign In',
+                        'url' => '/login',
+                        'variant' => 'outline',
+                        'type' => 'user'
+                    ],
+                    [
+                        'text' => 'Admin Login',
+                        'url' => '/admin/login',
+                        'variant' => 'default',
+                        'type' => 'admin'
+                    ]
                 ]
             ]
         ];
@@ -76,10 +107,10 @@ class HomeController extends Controller
                 ['name' => 'Terms of Service', 'url' => '/terms'],
                 ['name' => 'Privacy Policy', 'url' => '/privacy'],
             ],
-            'social_media' => [
-                ['name' => 'Facebook', 'url' => '#', 'icon' => 'facebook'],
-                ['name' => 'Twitter', 'url' => '#', 'icon' => 'twitter'],
-                ['name' => 'LinkedIn', 'url' => '#', 'icon' => 'linkedin'],
+            'social_media' => [],
+            'developer' => [
+                'name' => 'Abdullah Md. Shahporan',
+                'github_url' => 'https://github.com/abdullahshahporan'
             ],
             'copyright' => '© ' . date('Y') . ' MRT Ticketing System. All rights reserved.'
         ];
