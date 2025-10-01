@@ -4,14 +4,16 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import CookieConsent from './CookieConsent';
 import VerifyTicket from '../pages/VerifyTicket';
+import OneTimeTicket from '../pages/OneTimeTicket';
+import InstantBooking from '../pages/InstantBooking';
 import OneTimeTicketCard from './cards/OneTimeTicketCard';
 import VirtualMRTCard from './cards/VirtualMRTCard';
 
 // Home Page Component
 const HomePage: React.FC = () => {
   const handleOneTimeTicketSelect = () => {
-    console.log('One Time Ticket selected');
-    // TODO: Navigate to one-time ticket booking page
+    // Navigate to one-time ticket page
+    window.location.href = '/one-time-ticket';
   };
 
   const handleVirtualCardSelect = () => {
@@ -104,6 +106,8 @@ export const MainApp: React.FC = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/verify-ticket" element={<VerifyTicket />} />
+            <Route path="/one-time-ticket" element={<OneTimeTicket />} />
+            <Route path="/instant-booking" element={<InstantBooking />} />
             <Route path="/route-info" element={<HomePage />} />
           </Routes>
         </main>

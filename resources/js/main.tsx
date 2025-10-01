@@ -20,7 +20,7 @@ const App: React.FC = () => {
         setIsLoading(false);
         // Mark as visited so loader won't show again
         localStorage.setItem('mrt_has_visited', 'true');
-      }, 2000); // 2 seconds
+      }, 5000); // 5 seconds
 
       return () => clearTimeout(timer);
     }

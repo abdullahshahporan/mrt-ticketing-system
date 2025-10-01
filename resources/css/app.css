@@ -16,7 +16,7 @@
   @keyframes blink {
     0%, 50% {
       opacity: 1;
-      color: rgb(59 130 246);
+      color: rgb(57, 133, 255);
     }
     51%, 100% {
       opacity: 0.6;
