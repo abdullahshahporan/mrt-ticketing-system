@@ -6,15 +6,25 @@ import { Loader } from '@ui/loader';
 import { MainApp } from './components/MainApp';
 
 const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Always show loader on every page load/refresh
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // 2 seconds
+    // Check if user has visited before
+    const hasVisitedBefore = localStorage.getItem('mrt_has_visited');
+    
+    if (!hasVisitedBefore) {
+      // First time visitor - show loader
+      setIsLoading(true);
+      
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+        // Mark as visited so loader won't show again
+        localStorage.setItem('mrt_has_visited', 'true');
+      }, 2000); // 2 seconds
 
-    return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
+    }
+    // If user has visited before, don't show loader
   }, []);
 
   return (

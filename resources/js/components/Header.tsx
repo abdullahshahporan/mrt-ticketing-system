@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@ui/button';
 
 export const Header: React.FC = () => {
@@ -51,15 +52,21 @@ export const Header: React.FC = () => {
             
             {/* Desktop Navigation Menu */}
             <nav className="hidden lg:flex items-center space-x-1">
-              <Button variant="ghost" size="default" className="text-green-600 bg-green-50 text-base font-medium px-4 py-2">
-                Home
-              </Button>
-              <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-base font-medium px-4 py-2">
-                Verify Ticket
-              </Button>
-              <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-base font-medium px-4 py-2">
-                Route Info
-              </Button>
+              <Link to="/home">
+                <Button variant="ghost" size="default" className="text-green-600 bg-green-50 text-base font-medium px-4 py-2">
+                  Home
+                </Button>
+              </Link>
+              <Link to="/verify-ticket">
+                <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-base font-medium px-4 py-2">
+                  Verify Ticket
+                </Button>
+              </Link>
+              <Link to="/route-info">
+                <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-base font-medium px-4 py-2">
+                  Route Info
+                </Button>
+              </Link>
             </nav>
           </div>
           
@@ -100,15 +107,21 @@ export const Header: React.FC = () => {
           <div className="md:hidden border-t border-gray-100 py-4 bg-white shadow-lg rounded-b-lg">
             {/* Mobile Navigation Links */}
             <nav className="flex flex-col space-y-2 mb-4">
-              <Button variant="ghost" size="default" className="text-green-600 bg-green-50 text-base font-medium px-4 py-3 justify-start">
-                🏠 Home
-              </Button>
-              <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-base font-medium px-4 py-3 justify-start">
-                ✓ Verify Ticket
-              </Button>
-              <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-base font-medium px-4 py-3 justify-start">
-                🗺️ Route Info
-              </Button>
+              <Link to="/home">
+                <Button variant="ghost" size="default" className="text-green-600 bg-green-50 text-base font-medium px-4 py-3 justify-start w-full">
+                  🏠 Home
+                </Button>
+              </Link>
+              <Link to="/verify-ticket">
+                <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-base font-medium px-4 py-3 justify-start w-full">
+                  ✓ Verify Ticket
+                </Button>
+              </Link>
+              <Link to="/route-info">
+                <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-base font-medium px-4 py-3 justify-start w-full">
+                  🗺️ Route Info
+                </Button>
+              </Link>
               <Button variant="ghost" size="default" className="text-blue-600 hover:text-green-600 blink font-semibold text-base px-4 py-3 justify-start">
                 📞 Contact Us
               </Button>
