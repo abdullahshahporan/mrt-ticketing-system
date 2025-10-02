@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
 
@@ -38,10 +39,10 @@ const Footer: React.FC = () => {
               Quick Links
             </h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Book Tickets</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Route Map</a></li>
+              <li><Link to="/instant-booking" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Book Tickets</Link></li>
+              <li><Link to="/route-map" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Route Map</Link></li>
               <li><a href="#" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Schedules</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Fare Calculator</a></li>
+              <li><Link to="/fare-calculator" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Fare Calculator</Link></li>
             </ul>
           </div>
           
@@ -51,10 +52,10 @@ const Footer: React.FC = () => {
               Support
             </h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Help Center</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Contact Us</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Privacy Policy</a></li>
+              <li><Link to="/help-center" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Help Center</Link></li>
+              <li><Link to="/contact-us" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Contact Us</Link></li>
+              <li><Link to="/terms-of-service" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Terms of Service</Link></li>
+              <li><Link to="/privacy-policy" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Privacy Policy</Link></li>
             </ul>
           </div>
         </div>

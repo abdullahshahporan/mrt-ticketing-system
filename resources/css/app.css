@@ -23,4 +23,56 @@
       color: rgb(34 197 94);
     }
   }
+
+  .animate-slide-left {
+    animation: slide-left 80s linear infinite;
+  }
+  
+  @keyframes slide-left {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .marquee-container {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .marquee-content {
+    display: inline-block;
+    animation: marquee 60s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-content-with-pause {
+    display: inline-block;
+    animation: marquee-with-pause 81s linear infinite;
+    white-space: nowrap;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes marquee-with-pause {
+    0% {
+      transform: translateX(100%);
+    }
+    98.77% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
 }

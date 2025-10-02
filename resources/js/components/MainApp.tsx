@@ -2,12 +2,145 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import NotificationSlider from './NotificationSlider';
 import CookieConsent from './CookieConsent';
 import VerifyTicket from '../pages/VerifyTicket';
 import OneTimeTicket from '../pages/OneTimeTicket';
 import InstantBooking from '../pages/InstantBooking';
+import ScheduleBooking from '../pages/ScheduleBooking';
+import FareCalculator from '../pages/FareCalculator';
+import RouteMap from '../pages/RouteMap';
 import OneTimeTicketCard from './cards/OneTimeTicketCard';
 import VirtualMRTCard from './cards/VirtualMRTCard';
+
+// Simple Support Page Components
+const HelpCenter = () => (
+  <div className="max-w-4xl mx-auto px-4 py-8">
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Help Center</h1>
+    <div className="space-y-6">
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Frequently Asked Questions</h2>
+        <div className="space-y-4">
+          <div>
+            <h3 className="font-medium text-gray-900 mb-2">How do I book a ticket?</h3>
+            <p className="text-gray-600">Select your stations, choose travel time, and proceed with payment through our booking system.</p>
+          </div>
+          <div>
+            <h3 className="font-medium text-gray-900 mb-2">Can I cancel my booking?</h3>
+            <p className="text-gray-600">Yes, you can cancel bookings up to 30 minutes before departure time.</p>
+          </div>
+          <div>
+            <h3 className="font-medium text-gray-900 mb-2">What payment methods are accepted?</h3>
+            <p className="text-gray-600">We accept bKash, Nagad, Rocket, and major credit/debit cards.</p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-green-50 rounded-lg p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">Need More Help?</h2>
+        <p className="text-gray-600">Contact us at <span className="font-medium text-green-600">09666778899</span> or email <span className="font-medium text-green-600">support@mrtticket.gov.bd</span></p>
+      </div>
+    </div>
+  </div>
+);
+
+const ContactUs = () => (
+  <div className="max-w-4xl mx-auto px-4 py-8">
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Contact Us</h1>
+    <div className="grid md:grid-cols-2 gap-6">
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Contact Information</h2>
+        <div className="space-y-4">
+          <div>
+            <h3 className="font-medium text-gray-900">Customer Care</h3>
+            <p className="text-green-600 font-medium">09666778899</p>
+            <p className="text-sm text-gray-500">24/7 Available</p>
+          </div>
+          <div>
+            <h3 className="font-medium text-gray-900">Emergency Helpline</h3>
+            <p className="text-red-600 font-medium">16263</p>
+            <p className="text-sm text-gray-500">Emergency Support</p>
+          </div>
+          <div>
+            <h3 className="font-medium text-gray-900">Email Support</h3>
+            <p className="text-blue-600 font-medium">support@mrtticket.gov.bd</p>
+            <p className="text-sm text-gray-500">Response within 24 hours</p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Office Information</h2>
+        <div className="space-y-4">
+          <div>
+            <h3 className="font-medium text-gray-900">Address</h3>
+            <p className="text-gray-600">Dhaka Mass Transit Company Limited<br/>Sher-e-Bangla Nagar, Dhaka-1207</p>
+          </div>
+          <div>
+            <h3 className="font-medium text-gray-900">Office Hours</h3>
+            <p className="text-gray-600">Saturday - Thursday: 9:00 AM - 6:00 PM</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const TermsOfService = () => (
+  <div className="max-w-4xl mx-auto px-4 py-8">
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Terms of Service</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">1. Service Usage</h2>
+          <p className="text-gray-600">By using our MRT Ticketing System, you agree to these terms. Tickets are valid for the specified journey and time period only.</p>
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">2. Booking Terms</h2>
+          <p className="text-gray-600">All bookings are subject to availability. Payments must be completed to confirm reservations.</p>
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">3. Payment</h2>
+          <p className="text-gray-600">All payments are processed securely through our payment gateway. Refunds are processed as per our cancellation policy.</p>
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">4. User Responsibilities</h2>
+          <p className="text-gray-600">Users must provide accurate information and comply with metro regulations during travel.</p>
+        </div>
+      </div>
+      <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+        <p className="text-sm text-gray-500">For questions about these terms, contact us at legal@mrtticket.gov.bd</p>
+      </div>
+    </div>
+  </div>
+);
+
+const PrivacyPolicy = () => (
+  <div className="max-w-4xl mx-auto px-4 py-8">
+    <h1 className="text-3xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
+    <div className="bg-white rounded-lg shadow p-6">
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">Information We Collect</h2>
+          <p className="text-gray-600">We collect personal information you provide directly, such as name, email, phone number, and payment information for ticket booking purposes.</p>
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">How We Use Your Information</h2>
+          <p className="text-gray-600">Your information is used to process bookings, provide customer support, and improve our services.</p>
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">Data Security</h2>
+          <p className="text-gray-600">We implement appropriate security measures to protect your personal information against unauthorized access and disclosure.</p>
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">Your Rights</h2>
+          <p className="text-gray-600">You have the right to access, update, or delete your personal information. Contact us for any privacy-related requests.</p>
+        </div>
+      </div>
+      <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+        <p className="text-sm text-gray-500">For privacy questions, contact us at privacy@mrtticket.gov.bd</p>
+      </div>
+    </div>
+  </div>
+);
 
 // Home Page Component
 const HomePage: React.FC = () => {
@@ -99,6 +232,7 @@ export const MainApp: React.FC = () => {
     <Router>
       <div className="min-h-screen flex flex-col bg-gray-50">
         <Header />
+        <NotificationSlider />
         
         {/* Main Content Area with Routing */}
         <main className="flex-1">
@@ -108,7 +242,14 @@ export const MainApp: React.FC = () => {
             <Route path="/verify-ticket" element={<VerifyTicket />} />
             <Route path="/one-time-ticket" element={<OneTimeTicket />} />
             <Route path="/instant-booking" element={<InstantBooking />} />
-            <Route path="/route-info" element={<HomePage />} />
+            <Route path="/schedule-booking" element={<ScheduleBooking />} />
+            <Route path="/fare-calculator" element={<FareCalculator />} />
+            <Route path="/route-map" element={<RouteMap />} />
+            <Route path="/route-info" element={<RouteMap />} />
+            <Route path="/help-center" element={<HelpCenter />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           </Routes>
         </main>
         

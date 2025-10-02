@@ -1,16 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import InstantBookingCard from '../components/booking/InstantBookingCard';
 import ScheduleBookingCard from '../components/booking/ScheduleBookingCard';
 
 const OneTimeTicket: React.FC = () => {
+  const navigate = useNavigate();
+
   const handleInstantBooking = () => {
-    console.log('Instant Booking selected');
-    // TODO: Navigate to instant booking flow
+    navigate('/instant-booking');
   };
 
   const handleScheduleBooking = () => {
-    console.log('Schedule Booking selected');
-    // TODO: Navigate to schedule booking flow
+    navigate('/schedule-booking');
   };
 
   return (

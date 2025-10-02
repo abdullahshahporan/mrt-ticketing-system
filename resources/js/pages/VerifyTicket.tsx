@@ -81,7 +81,7 @@ const VerifyTicket: React.FC = () => {
     setVerificationResult(null);
     
     try {
-      const response = await fetch(`/api/instant-booking/status/${pnrNumber}`, {
+      const response = await fetch(`/test-verify/${pnrNumber}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

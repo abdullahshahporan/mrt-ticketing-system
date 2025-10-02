@@ -62,7 +62,8 @@ export const Header: React.FC = () => {
                   Verify Ticket
                 </Button>
               </Link>
-              <Link to="/route-info">
+              
+              <Link to="/route-map">
                 <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-base font-medium px-4 py-2">
                   Route Info
                 </Button>
@@ -74,9 +75,12 @@ export const Header: React.FC = () => {
           <div className="flex items-center space-x-3">
             {/* Desktop Auth Buttons */}
             <div className="hidden md:flex items-center space-x-3">
+              <Link to="/contact-us">
               <Button variant="ghost" size="default" className="text-blue-600 hover:text-green-600 blink font-semibold text-base px-4 py-2">
                 Contact Us
               </Button>
+              </Link>
+              
               <Button variant="outline" size="default" className="text-gray-600 border-gray-300 hover:border-green-500 hover:text-green-600 h-10 text-base font-medium px-4 py-2">
                 Sign In
               </Button>
@@ -117,7 +121,12 @@ export const Header: React.FC = () => {
                   ✓ Verify Ticket
                 </Button>
               </Link>
-              <Link to="/route-info">
+              <Link to="/fare-calculator">
+                <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-base font-medium px-4 py-3 justify-start w-full">
+                  💰 Fare Calculator
+                </Button>
+              </Link>
+              <Link to="/route-map">
                 <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-base font-medium px-4 py-3 justify-start w-full">
                   🗺️ Route Info
                 </Button>
@@ -140,9 +149,11 @@ export const Header: React.FC = () => {
                 <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-sm font-medium px-4 py-2 justify-start">
                   ⏰ Schedules
                 </Button>
-                <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-sm font-medium px-4 py-2 justify-start">
-                  💰 Fare Calculator
-                </Button>
+                <Link to="/fare-calculator">
+                  <Button variant="ghost" size="default" className="text-gray-600 hover:text-green-600 text-sm font-medium px-4 py-2 justify-start w-full">
+                    💰 Fare Calculator
+                  </Button>
+                </Link>
               </div>
             </div>
             
