@@ -80,10 +80,12 @@ export const Header: React.FC = () => {
                 Contact Us
               </Button>
               </Link>
-              
+              <Link to="/signin">
               <Button variant="outline" size="default" className="text-gray-600 border-gray-300 hover:border-green-500 hover:text-green-600 h-10 text-base font-medium px-4 py-2">
                 Sign In
               </Button>
+              </Link>
+              
               <Button size="default" className="bg-green-600 hover:bg-green-700 text-white h-10 text-base font-medium px-4 py-2">
                 Admin Login
               </Button>
@@ -178,9 +180,12 @@ export const Header: React.FC = () => {
             
             {/* Mobile Auth Buttons */}
             <div className="flex flex-col space-y-2 px-4 border-t border-gray-200 pt-3">
-              <Button variant="outline" size="default" className="text-gray-600 border-gray-300 hover:border-green-500 hover:text-green-600 text-base font-medium py-3 w-full">
+              <Link to="/signin">
+<Button variant="outline" size="default" className="text-gray-600 border-gray-300 hover:border-green-500 hover:text-green-600 text-base font-medium py-3 w-full">
                 👤 Sign In
               </Button>
+              </Link>
+              
               <Button size="default" className="bg-green-600 hover:bg-green-700 text-white text-base font-medium py-3 w-full">
                 🔐 Admin Login
               </Button>

@@ -22,6 +22,8 @@ Route::get('/schedule-booking', [HomeController::class, 'index']);
 Route::get('/verify-ticket', [HomeController::class, 'index']);
 Route::get('/fare-calculator', [HomeController::class, 'index']);
 Route::get('/route-map', [HomeController::class, 'index']);
+Route::get('/virtual-card', [HomeController::class, 'index']);
+Route::get('/signin', [HomeController::class, 'index']);
 Route::get('/help-center', [HomeController::class, 'index']);
 Route::get('/contact-us', [HomeController::class, 'index']);
 Route::get('/terms-of-service', [HomeController::class, 'index']);

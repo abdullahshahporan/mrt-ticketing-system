@@ -10,6 +10,8 @@ import InstantBooking from '../pages/InstantBooking';
 import ScheduleBooking from '../pages/ScheduleBooking';
 import FareCalculator from '../pages/FareCalculator';
 import RouteMap from '../pages/RouteMap';
+import VirtualCard from '../pages/VirtualCard';
+import SignIn from '../pages/SignIn';
 import OneTimeTicketCard from './cards/OneTimeTicketCard';
 import VirtualMRTCard from './cards/VirtualMRTCard';
 
@@ -150,8 +152,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleVirtualCardSelect = () => {
-    console.log('Virtual MRT Card selected');
-    // TODO: Navigate to virtual card registration/management page
+    window.location.href = '/virtual-card';
   };
 
   return (
@@ -246,6 +247,8 @@ export const MainApp: React.FC = () => {
             <Route path="/fare-calculator" element={<FareCalculator />} />
             <Route path="/route-map" element={<RouteMap />} />
             <Route path="/route-info" element={<RouteMap />} />
+            <Route path="/virtual-card" element={<VirtualCard />} />
+            <Route path="/signin" element={<SignIn />} />
             <Route path="/help-center" element={<HelpCenter />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
