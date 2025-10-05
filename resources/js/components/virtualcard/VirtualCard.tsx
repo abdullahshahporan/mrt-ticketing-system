@@ -18,12 +18,31 @@ const VirtualCard: React.FC = () => {
 
   useEffect(() => {
     // Initialize authentication middleware and listen for changes
-    const unsubscribe = AuthMiddleware.onAuthStateChange((user: User | null) => {
+    const unsubscribe = AuthMiddleware.onAuthStateChange(async (user: User | null) => {
       if (user && AuthMiddleware.isEmailVerified()) {
+        const email = user.email || '';
         setUserSession({
-          email: user.email || '',
+          email: email,
           isVerified: user.emailVerified
         });
+        
+        try {
+          // Check if user already has an active card or needs payment
+          const response = await fetch(`/api/virtual-card/status?email=${email}`);
+          const data = await response.json();
+          
+          if (data.success) {
+            if (data.data.hasActiveCard) {
+              // User has an active card - redirect to dashboard
+              navigate('/virtual-card-dashboard');
+            } else if (data.data.paymentRequired) {
+              // User has profile but needs payment
+              navigate('/payment');
+            }
+          }
+        } catch (error) {
+          console.error('Error checking virtual card status:', error);
+        }
       } else {
         setUserSession(null);
       }
@@ -35,7 +54,7 @@ const VirtualCard: React.FC = () => {
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const handleSignUpSuccess = (email: string) => {
     console.log('Sign up successful for:', email);

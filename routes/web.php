@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CookieController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketVerificationController;
 use App\Http\Controllers\OneTimeTicketController;
 use App\Http\Controllers\InstantBookingController;
@@ -23,6 +24,8 @@ Route::get('/verify-ticket', [HomeController::class, 'index']);
 Route::get('/fare-calculator', [HomeController::class, 'index']);
 Route::get('/route-map', [HomeController::class, 'index']);
 Route::get('/virtual-card', [HomeController::class, 'index']);
+Route::get('/virtual-card-dashboard', [HomeController::class, 'index']);
+Route::get('/payment', [HomeController::class, 'index']);
 Route::get('/signin', [HomeController::class, 'index']);
 Route::get('/help-center', [HomeController::class, 'index']);
 Route::get('/contact-us', [HomeController::class, 'index']);
@@ -39,6 +42,14 @@ Route::prefix('api')->group(function () {
     Route::get('/cookie-policy', [CookieController::class, 'getPolicy'])->name('api.cookie.policy');
     Route::get('/cookie-settings', [CookieController::class, 'getSettings'])->name('api.cookie.settings');
     Route::post('/cookie-consent', [CookieController::class, 'logConsent'])->name('api.cookie.consent');
+    
+    // Payment routes
+    Route::get('/payment/options', [App\Http\Controllers\PaymentController::class, 'getPaymentOptions'])->name('api.payment.options');
+    Route::post('/payment/process', [App\Http\Controllers\PaymentController::class, 'processPayment'])->name('api.payment.process');
+    
+    // Virtual Card routes
+    Route::get('/virtual-card/details', [App\Http\Controllers\VirtualCardController::class, 'getDetails'])->name('api.virtual-card.details');
+    Route::get('/virtual-card/status', [App\Http\Controllers\VirtualCardController::class, 'checkCardStatus'])->name('api.virtual-card.status');
     
     // Ticket verification routes
     Route::post('/verify-ticket', [TicketVerificationController::class, 'verifyTicket'])->name('api.verify.ticket');

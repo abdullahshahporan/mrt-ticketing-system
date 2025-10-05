@@ -150,6 +150,34 @@ export class AuthService {
   }
 
   /**
+   * Get current authenticated user
+   */
+  static getCurrentUser(): User | null {
+    return auth.currentUser;
+  }
+  
+  /**
+   * Get user info (for demo purposes in virtual card dashboard)
+   * This method returns a simplified user object for demonstration
+   */
+  static getCurrentUserInfo(): { email: string; name?: string } | null {
+    const user = this.getCurrentUser();
+    if (user) {
+      return {
+        email: user.email || '',
+        name: user.displayName || undefined
+      };
+    }
+    
+    // For demo purposes, return a mock user if no authenticated user exists
+    // In production, this would be removed
+    return {
+      email: 'demo@example.com',
+      name: 'Demo User'
+    };
+  }
+
+  /**
    * Validate email format
    */
   static validateEmail(email: string): { isValid: boolean; message?: string } {

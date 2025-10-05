@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthService } from '../../services/AuthService';
 import ProfileForm from './ProfileForm';
-import ProfileStatus from './ProfileStatus';
 
 interface UserDashboardProps {
   userEmail: string;
@@ -25,43 +24,10 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ userEmail, onSignOut }) =
     }
   };
 
-  const [profileStatus, setProfileStatus] = useState<string | null>(null);
-  
   const handleProfileComplete = (data: any) => {
     console.log('Profile completed with data:', data);
-    // Check status after profile completion
-    checkProfileStatus();
+    // You can add additional logic here when profile is completed
   };
-  
-  const handleProfileStatus = (status: string) => {
-    setProfileStatus(status);
-  };
-  
-  // Function to check profile status
-  const checkProfileStatus = async () => {
-    try {
-      const response = await fetch(`/api/virtual-card/status?email=${encodeURIComponent(userEmail)}`);
-      const data = await response.json();
-      
-      if (data.success) {
-        setProfileStatus(data.data.status);
-        
-        // If payment is required, redirect to payment page
-        if (data.data.paymentRequired) {
-          navigate('/payment');
-        }
-      }
-    } catch (error) {
-      console.error('Error checking profile status:', error);
-    }
-  };
-  
-  // Check profile status on component mount
-  useEffect(() => {
-    if (userEmail) {
-      checkProfileStatus();
-    }
-  }, [userEmail]);
 
   return (
     <div className="bg-white rounded-lg shadow-xl overflow-hidden max-w-4xl mx-auto">
@@ -84,18 +50,11 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ userEmail, onSignOut }) =
         </div>
       </div>
 
-      {/* Profile Status Component - Only shown when profile exists but payment is needed */}
-      <div className="p-6 sm:p-8">
-        <ProfileStatus email={userEmail} onComplete={handleProfileStatus} />
-
-        {/* Profile Form Component */}
-        {profileStatus !== 'payment_required' && (
-          <ProfileForm 
-            userEmail={userEmail} 
-            onProfileComplete={handleProfileComplete}
-          />
-        )}
-      </div>
+      {/* Profile Form Component */}
+      <ProfileForm 
+        userEmail={userEmail} 
+        onProfileComplete={handleProfileComplete}
+      />
     </div>
   );
 };

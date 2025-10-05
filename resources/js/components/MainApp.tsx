@@ -11,6 +11,8 @@ import ScheduleBooking from '../pages/ScheduleBooking';
 import FareCalculator from '../pages/FareCalculator';
 import RouteMap from '../pages/RouteMap';
 import VirtualCard from '../pages/VirtualCard';
+import VirtualCardDashboard from '../pages/VirtualCardDashboard';
+import Payment from './virtualcard/Payment';
 import SignIn from '../pages/SignIn';
 import OneTimeTicketCard from './cards/OneTimeTicketCard';
 import VirtualMRTCard from './cards/VirtualMRTCard';
@@ -248,6 +250,8 @@ export const MainApp: React.FC = () => {
             <Route path="/route-map" element={<RouteMap />} />
             <Route path="/route-info" element={<RouteMap />} />
             <Route path="/virtual-card" element={<VirtualCard />} />
+            <Route path="/virtual-card-dashboard" element={<VirtualCardDashboard />} />
+            <Route path="/payment" element={<Payment />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/help-center" element={<HelpCenter />} />
             <Route path="/contact-us" element={<ContactUs />} />

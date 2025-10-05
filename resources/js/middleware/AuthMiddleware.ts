@@ -13,9 +13,12 @@ export class AuthMiddleware {
    * Initialize authentication listener
    */
   static init(): Promise<User | null> {
+    console.log("AuthMiddleware.init - Initializing auth state");
     return new Promise((resolve) => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         this.currentUser = user;
+        console.log("AuthMiddleware.init - Auth state changed:", 
+          user ? `User: ${user.email}, Verified: ${user.emailVerified}` : "No user");
         this.notifyListeners(user);
         unsubscribe(); // Resolve only once
         resolve(user);
@@ -27,6 +30,8 @@ export class AuthMiddleware {
    * Check if user is authenticated
    */
   static isAuthenticated(): boolean {
+    console.log("AuthMiddleware.isAuthenticated - Current user:", this.currentUser?.email);
+    console.log("AuthMiddleware.isAuthenticated - Email verified:", this.currentUser?.emailVerified);
     return this.currentUser !== null && this.currentUser.emailVerified;
   }
 
