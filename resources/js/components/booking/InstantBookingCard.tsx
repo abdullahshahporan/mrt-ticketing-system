@@ -7,7 +7,7 @@ interface InstantBookingCardProps {
 
 const InstantBookingCard: React.FC<InstantBookingCardProps> = ({ onSelect }) => {
   const handleClick = () => {
-    window.location.href = '/instant-booking';
+    window.location.href = '/one-time-ticket/instant';
   };
 
   return (

@@ -17,9 +17,23 @@ use App\Http\Controllers\Support\PrivacyPolicyController;
 // Main application routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [HomeController::class, 'index']);
-Route::get('/one-time-ticket', [HomeController::class, 'index']);
-Route::get('/instant-booking', [HomeController::class, 'index']);
+Route::get('/one-time-ticket', function () {
+    $oneTimeData = [
+        'title' => 'One-Time Ticketing',
+        'description' => 'Book your one-time MRT ticket easily.',
+        // Add more data as needed
+    ];
+    return view('onetime', compact('oneTimeData'));
+});
+// Serve the SPA shell for instant booking so React can mount at /one-time-ticket/instant
+Route::get('/one-time-ticket/instant', [HomeController::class, 'index']);
+
+
 Route::get('/schedule-booking', [HomeController::class, 'index']);
+// Serve SPA shell for schedule booking at canonical path
+Route::get('/one-time-ticket/schedule', [HomeController::class, 'index']);
+// Also serve the SPA shell for the full canonical schedule path requested by the user
+Route::get('/one-time-ticket/schedule-booking', [HomeController::class, 'index']);
 Route::get('/verify-ticket', [HomeController::class, 'index']);
 Route::get('/fare-calculator', [HomeController::class, 'index']);
 Route::get('/route-map', [HomeController::class, 'index']);

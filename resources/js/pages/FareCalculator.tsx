@@ -273,7 +273,7 @@ const FareCalculator: React.FC = () => {
                   <h4 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Button
-                      onClick={() => window.location.href = '/instant-booking'}
+                      onClick={() => window.location.href = '/one-time-ticket/instant'}
                       className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition-all"
                     >
                       Book Now

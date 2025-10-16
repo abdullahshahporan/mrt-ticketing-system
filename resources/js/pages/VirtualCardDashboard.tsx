@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthMiddleware } from '../middleware/AuthMiddleware';
+import { AuthService } from '../services/AuthService';
 import { debugLog, trackNavigation, trackApiCall } from '../utils/debugHelper';
 
-// Create an improved AuthService for this page
-const AuthService = {
+// Local helper to get current user info for this page (does not conflict with global AuthService)
+const LocalAuthHelper = {
   getCurrentUserInfo: () => {
     debugLog('Dashboard', 'Getting current user info');
-    
+
     // First check Firebase auth
     const user = AuthMiddleware.getCurrentUser();
     if (user && user.email) {
       debugLog('Dashboard', `Found authenticated user: ${user.email}`);
-      return { 
+      return {
         email: user.email,
-        name: user.displayName || 'MRT User' 
+        name: user.displayName || 'MRT User'
       };
     }
-    
+
     // Fallback to localStorage (for demo purposes)
     const userStr = localStorage.getItem('user');
     if (userStr) {
@@ -30,7 +31,7 @@ const AuthService = {
         return null;
       }
     }
-    
+
     debugLog('Dashboard', 'No authenticated user found', 'warn');
     return null;
   }
@@ -73,7 +74,7 @@ const VirtualCardDashboard: React.FC = () => {
       await AuthMiddleware.init();
       
       // Check authentication
-      const user = AuthService.getCurrentUserInfo();
+  const user = LocalAuthHelper.getCurrentUserInfo();
       
       debugLog('Dashboard', 'Auth check result', 'info', user);
       
@@ -84,7 +85,8 @@ const VirtualCardDashboard: React.FC = () => {
         return;
       }
       
-      if (!user.email) {
+      const userEmail = user.email;
+      if (!userEmail) {
         debugLog('Dashboard', 'User missing email, redirecting to signin', 'warn');
         trackNavigation('dashboard', '/signin', { reason: 'missing_email' });
         navigate('/signin', { replace: true });
@@ -93,7 +95,7 @@ const VirtualCardDashboard: React.FC = () => {
       
       debugLog('Dashboard', 'User authenticated, fetching card details');
       // Fetch card details
-      fetchCardDetails(user.email);
+  fetchCardDetails(userEmail);
     };
     
     initializeAuth();
@@ -151,6 +153,18 @@ const VirtualCardDashboard: React.FC = () => {
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      await AuthService.signOut();
+      // clear any fallback localStorage user info
+      localStorage.removeItem('user');
+      navigate('/', { replace: true });
+    } catch (err) {
+      console.error('Error signing out:', err);
+      alert('Failed to sign out. Please try again.');
+    }
+  };
+
   const handleRecharge = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -164,7 +178,13 @@ const VirtualCardDashboard: React.FC = () => {
       
       // In a real app, you would call your API to process the payment
       const user = AuthService.getCurrentUserInfo();
-      
+      if (!user || !user.email) {
+        setError('Unable to determine user email for payment. Please sign in again.');
+        setIsLoading(false);
+        return;
+      }
+      const userEmail = user.email;
+
       const response = await fetch('/api/payment/process', {
         method: 'POST',
         headers: {
@@ -174,7 +194,7 @@ const VirtualCardDashboard: React.FC = () => {
         body: JSON.stringify({
           amount: rechargeAmount,
           paymentMethod: paymentMethod,
-          userEmail: user.email
+          userEmail: userEmail
         })
       });
       
@@ -184,8 +204,8 @@ const VirtualCardDashboard: React.FC = () => {
         throw new Error(data.message || 'Failed to process recharge');
       }
       
-      // Refresh card details
-      fetchCardDetails(user.email);
+  // Refresh card details
+  fetchCardDetails(userEmail);
       
       // Reset form
       setRechargeAmount(0);
@@ -265,7 +285,20 @@ const VirtualCardDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Virtual MRT Card Dashboard</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Virtual MRT Card Dashboard</h1>
+          <div>
+            <button
+              onClick={handleSignOut}
+              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none"
+            >
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
         
         {/* Tab Navigation */}
         <div className="flex flex-wrap mb-6 border-b border-gray-200">

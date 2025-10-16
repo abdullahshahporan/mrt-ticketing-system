@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import NotificationSlider from './NotificationSlider';
@@ -244,8 +244,14 @@ export const MainApp: React.FC = () => {
             <Route path="/home" element={<HomePage />} />
             <Route path="/verify-ticket" element={<VerifyTicket />} />
             <Route path="/one-time-ticket" element={<OneTimeTicket />} />
-            <Route path="/instant-booking" element={<InstantBooking />} />
-            <Route path="/schedule-booking" element={<ScheduleBooking />} />
+            {/* Canonical path for instant booking (server-side routes point here) */}
+            <Route path="/one-time-ticket/instant" element={<InstantBooking />} />
+            {/* Compatibility redirect: old path -> canonical path */}
+            <Route path="/instant-booking" element={<Navigate to="/one-time-ticket/instant" replace />} />
+            {/* Canonical path for schedule booking */}
+            <Route path="/one-time-ticket/schedule-booking" element={<ScheduleBooking />} />
+            {/* Compatibility redirect: old path -> canonical path */}
+            <Route path="/schedule-booking" element={<Navigate to="/one-time-ticket/schedule-booking" replace />} />
             <Route path="/fare-calculator" element={<FareCalculator />} />
             <Route path="/route-map" element={<RouteMap />} />
             <Route path="/route-info" element={<RouteMap />} />

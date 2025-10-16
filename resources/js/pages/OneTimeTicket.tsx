@@ -7,7 +7,7 @@ const OneTimeTicket: React.FC = () => {
   const navigate = useNavigate();
 
   const handleInstantBooking = () => {
-    navigate('/instant-booking');
+    navigate('/one-time-ticket/instant');
   };
 
   const handleScheduleBooking = () => {

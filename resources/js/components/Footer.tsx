@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
               Quick Links
             </h4>
             <ul className="space-y-2">
-              <li><Link to="/instant-booking" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Book Tickets</Link></li>
+              <li><Link to="/one-time-ticket/instant" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Book Tickets</Link></li>
               <li><Link to="/route-map" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Route Map</Link></li>
               <li><a href="#" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Schedules</a></li>
               <li><Link to="/fare-calculator" className="text-sm text-gray-600 hover:text-green-600 transition-colors">Fare Calculator</Link></li>
