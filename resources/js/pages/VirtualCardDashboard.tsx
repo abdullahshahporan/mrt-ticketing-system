@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import VirtualCardQR from '../components/VirtualCardQR';
 import { useNavigate } from 'react-router-dom';
 import { AuthMiddleware } from '../middleware/AuthMiddleware';
 import { AuthService } from '../services/AuthService';
@@ -49,12 +50,17 @@ interface CardDetail {
 }
 
 interface Transaction {
-  id: string;
-  type: 'RECHARGE' | 'TRIP';
-  amount: number;
-  date: string;
-  description: string;
-  station: string | null;
+  id: number | string;
+  transaction_id?: string;
+  type: string;
+  amount: number | string;
+  payment_method?: string;
+  status?: string;
+  description?: string;
+  from_station?: string | null;
+  to_station?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
 const VirtualCardDashboard: React.FC = () => {
@@ -331,7 +337,7 @@ const VirtualCardDashboard: React.FC = () => {
         {/* Card Details Tab */}
         {activeTab === 'card' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Virtual MRT Card */}
+            {/* Virtual MRT Card with QR Code */}
             <div className="lg:col-span-2">
               <div className="bg-gradient-to-r from-green-500 to-green-700 rounded-lg shadow-lg overflow-hidden">
                 <div className="p-6">
@@ -347,28 +353,20 @@ const VirtualCardDashboard: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                  
-                  <div className="mt-6">
-                    <p className="text-xs text-green-100 mb-1">Card Number</p>
-                    <div className="text-xl text-white font-mono tracking-wider">
-                      {cardDetails.cardNumber.match(/.{1,4}/g)?.join(' ')}
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6">
-                    <div className="flex justify-between">
-                      <div>
-                        <p className="text-xs text-green-100 mb-1">Card Holder</p>
-                        <p className="text-sm text-white">{cardDetails.name}</p>
+                  <div className="mt-6 flex flex-col md:flex-row md:items-center md:space-x-8">
+                    <div className="mb-4 md:mb-0">
+                      <p className="text-xs text-green-100 mb-1">Card Number</p>
+                      <div className="text-xl text-white font-mono tracking-wider">
+                        {cardDetails.cardNumber.match(/.{1,4}/g)?.join(' ')}
                       </div>
-                      <div>
-                        <p className="text-xs text-green-100 mb-1">Expires</p>
-                        <p className="text-sm text-white">{new Date(cardDetails.expiryDate).toLocaleDateString('en-GB', {month: '2-digit', year: '2-digit'})}</p>
-                      </div>
+                      <p className="text-xs text-green-100 mt-4 mb-1">Card Holder</p>
+                      <p className="text-sm text-white">{cardDetails.name}</p>
+                      <p className="text-xs text-green-100 mt-4 mb-1">Expires</p>
+                      <p className="text-sm text-white">{new Date(cardDetails.expiryDate).toLocaleDateString('en-GB', {month: '2-digit', year: '2-digit'})}</p>
                     </div>
+                    {/* QR code removed from left card */}
                   </div>
                 </div>
-                
                 <div className="bg-green-800 p-4">
                   <div className="flex justify-between items-center">
                     <div className="space-y-2">
@@ -392,28 +390,17 @@ const VirtualCardDashboard: React.FC = () => {
               </div>
             </div>
             
-            {/* Card Summary Info */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Card Information</h3>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-gray-500">Last Recharge</p>
-                    <p className="font-medium text-gray-900">{formatDate(cardDetails.lastRecharge)}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Last Used</p>
-                    <p className="font-medium text-gray-900">{formatDate(cardDetails.lastUsed)}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Card Status</p>
-                    <div className="flex items-center">
-                      <div className={`h-2 w-2 rounded-full ${cardDetails.isActive ? 'bg-green-500' : 'bg-red-500'} mr-2`}></div>
-                      <p className="font-medium text-gray-900">{cardDetails.isActive ? 'Active' : 'Inactive'}</p>
-                    </div>
-                  </div>
-                </div>
+            {/* Stylish QR Code Box */}
+            <div className="bg-white rounded-xl shadow-lg flex flex-col items-center justify-center py-12 px-8 border border-green-100">
+              <h3 className="text-xl font-bold text-green-700 mb-4">Scan Your MRT Card</h3>
+              <div className="p-4 bg-green-50 rounded-lg shadow mb-4">
+                <VirtualCardQR
+                  name={cardDetails.name}
+                  cardNumber={cardDetails.cardNumber}
+                  balance={cardDetails.balance}
+                />
               </div>
+              <p className="text-green-600 text-sm font-medium">Show this QR at station for quick access</p>
             </div>
           </div>
         )}
@@ -453,27 +440,17 @@ const VirtualCardDashboard: React.FC = () => {
                     <tbody className="bg-white divide-y divide-gray-200">
                       {transactions.map(transaction => (
                         <tr key={transaction.id}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {transaction.id}
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{transaction.transaction_id || transaction.id}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${transaction.type === 'PAYMENT' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>{transaction.type}</span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              transaction.type === 'RECHARGE' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
-                            }`}>
-                              {transaction.type}
+                            <span className={transaction.type === 'PAYMENT' ? 'text-green-600' : 'text-red-600'}>
+                              {transaction.type === 'PAYMENT' ? '+' : '-'}৳{Number(transaction.amount).toFixed(2)}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <span className={transaction.type === 'RECHARGE' ? 'text-green-600' : 'text-red-600'}>
-                              {transaction.type === 'RECHARGE' ? '+' : '-'}৳{transaction.amount.toFixed(2)}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {formatDate(transaction.date)}
-                          </td>
-                          <td className="px-6 py-4 text-sm text-gray-500">
-                            {transaction.description}
-                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{transaction.created_at ? formatDate(transaction.created_at) : '-'}</td>
+                          <td className="px-6 py-4 text-sm text-gray-500">{transaction.description || '-'}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -487,59 +464,16 @@ const VirtualCardDashboard: React.FC = () => {
         {/* Trip History Tab */}
         {activeTab === 'trips' && (
           <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Recent Trips</h3>
-              
-              {transactions.filter(t => t.type === 'TRIP').length === 0 ? (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">No trip history found</p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Trip ID
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Route
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Date & Time
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Fare
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {transactions
-                        .filter(transaction => transaction.type === 'TRIP')
-                        .map(trip => (
-                        <tr key={trip.id}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {trip.id}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {trip.station}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {formatDate(trip.date)}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-red-600">
-                            ৳{trip.amount.toFixed(2)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+            <div className="p-8 flex flex-col items-center justify-center">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Trip History</h3>
+              <div className="text-center py-8">
+                <p className="text-lg text-gray-700 font-semibold mb-2">Hold On!</p>
+                <p className="text-gray-500 mb-4">It will be Available shortly.</p>
+                <p className="text-green-600 font-medium">Thanks For Being With Us!</p>
+              </div>
             </div>
           </div>
         )}
-        
         {/* Recharge Card Tab */}
         {activeTab === 'recharge' && (
           <div className="bg-white rounded-lg shadow overflow-hidden">

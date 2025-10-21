@@ -37,3 +37,10 @@ const App: React.FC = () => {
 
 const el = document.getElementById('app');
 if (el) createRoot(el).render(<App />);
+
+// Mount AdminDashboard for admin dashboard blade view
+import AdminDashboard from './pages/AdminDashboard';
+const adminDashboardRoot = document.getElementById('admin-dashboard-root');
+if (adminDashboardRoot) {
+  createRoot(adminDashboardRoot).render(<AdminDashboard />);
+}

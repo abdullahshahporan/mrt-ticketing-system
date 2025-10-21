@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import TicketQR from '../components/TicketQR';
+import { downloadTicketQRs, downloadTicketQRsFromBase } from '../services/TicketQRService';
 import BookingForm from '../components/instant-booking/BookingForm';
 import RouteVisualization from '../components/instant-booking/RouteVisualization';
 import { Station } from '../types/booking';
@@ -9,6 +12,33 @@ const InstantBooking: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(1);
   const [totalFare, setTotalFare] = useState<number>(0);
   const [isCalculating, setIsCalculating] = useState<boolean>(false);
+  const [showPNRNotification, setShowPNRNotification] = useState(false);
+  const [ticketData, setTicketData] = useState<any>(null);
+  const [autoDownload, setAutoDownload] = useState(false);
+  const ticketRef = useRef<any>(null);
+  const [ticketBlob, setTicketBlob] = useState<Blob | null>(null);
+  const navigate = useNavigate();
+
+  // When ticketData appears, try to pre-generate PDF blob (so download can be synchronous)
+  useEffect(() => {
+    let mounted = true;
+    const makeBlob = async () => {
+      if (!ticketData) return;
+      try {
+        // small delay to ensure hidden DOM has rendered (increase slightly)
+        await new Promise((r) => setTimeout(r, 500));
+        if (ticketRef.current && typeof ticketRef.current.generatePDFBlob === 'function') {
+          const blob = await ticketRef.current.generatePDFBlob();
+          console.debug('InstantBooking: pre-generated blob', blob);
+          if (mounted) setTicketBlob(blob);
+        }
+      } catch (e) {
+        console.error('Pre-generate PDF blob failed', e);
+      }
+    };
+    makeBlob();
+    return () => { mounted = false; };
+  }, [ticketData]);
 
   // Calculate fare when from, to, or quantity changes
   useEffect(() => {
@@ -69,8 +99,34 @@ const InstantBooking: React.FC = () => {
 
       const data = await response.json();
       if (data.success) {
-        alert('Booking successful! PNR: ' + data.pnr);
-        // TODO: Redirect to ticket confirmation page
+        // Use new QR service for all tickets
+        if (data.base_pnr && data.quantity && data.quantity > 1) {
+          await downloadTicketQRsFromBase(
+            data.base_pnr,
+            data.quantity,
+            data.from_station || fromStation,
+            data.to_station || toStation,
+            data.price || totalFare,
+            data.validity || 'Valid for 1 hour'
+          );
+        } else if (data.pnr) {
+          await downloadTicketQRs([
+            {
+              ticketPNR: data.pnr,
+              from: data.from_station || fromStation,
+              to: data.to_station || toStation,
+              price: data.price || totalFare,
+              validity: data.validity || 'Valid for 1 hour'
+            }
+          ]);
+        }
+        // Navigate to confirmation page with PNR
+        navigate('/booking-confirmation', {
+          state: {
+            pnr: data.pnr,
+            message: 'Your ticket has been booked successfully. Please save your PNR for future reference.'
+          }
+        });
       } else {
         alert('Booking failed: ' + data.message);
       }
@@ -81,47 +137,48 @@ const InstantBooking: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Page Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+  // removed duplicate return
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Page Header */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              Instant Booking
+            </h1>
+            <p className="text-lg text-gray-600">
+              Book your ticket now and travel within the next hour
+            </p>
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Instant Booking
-          </h1>
-          <p className="text-lg text-gray-600">
-            Book your ticket now and travel within the next hour
-          </p>
-        </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Side - Booking Form */}
-          <BookingForm
-            fromStation={fromStation}
-            toStation={toStation}
-            quantity={quantity}
-            totalFare={totalFare}
-            isCalculating={isCalculating}
-            onFromStationChange={setFromStation}
-            onToStationChange={setToStation}
-            onQuantityChange={setQuantity}
-            onBookTicket={handleBookTicket}
-          />
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left Side - Booking Form */}
+            <BookingForm
+              fromStation={fromStation}
+              toStation={toStation}
+              quantity={quantity}
+              totalFare={totalFare}
+              isCalculating={isCalculating}
+              onFromStationChange={setFromStation}
+              onToStationChange={setToStation}
+              onQuantityChange={setQuantity}
+              onBookTicket={handleBookTicket}
+            />
 
-          {/* Right Side - Route Visualization */}
-          <RouteVisualization
-            fromStation={fromStation}
-            toStation={toStation}
-          />
+            {/* Right Side - Route Visualization */}
+            <RouteVisualization
+              fromStation={fromStation}
+              toStation={toStation}
+            />
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default InstantBooking;

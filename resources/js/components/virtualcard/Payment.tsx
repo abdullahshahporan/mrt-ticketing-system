@@ -6,6 +6,7 @@ interface PaymentData {
   amount: number | string;
   paymentMethod: string;
   userEmail: string;
+  cardNumber: string;
 }
 
 interface PaymentOptions {
@@ -25,10 +26,12 @@ const Payment: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [userEmail, setUserEmail] = useState<string>('');
+  const cardNumberFromState = location.state?.cardNumber || '';
   const [paymentData, setPaymentData] = useState<PaymentData>({
     amount: 200,
     paymentMethod: '',
-    userEmail: ''
+    userEmail: '',
+    cardNumber: cardNumberFromState
   });
   const [paymentOptions, setPaymentOptions] = useState<PaymentOptions | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -144,7 +147,8 @@ const Payment: React.FC = () => {
     // Convert amount to number for backend if it's a string
     const submitData = {
       ...paymentData,
-      amount: typeof paymentData.amount === 'string' ? parseFloat(paymentData.amount) : paymentData.amount
+      amount: typeof paymentData.amount === 'string' ? parseFloat(paymentData.amount) : paymentData.amount,
+      card_number: paymentData.cardNumber
     };
 
     try {

@@ -217,4 +217,34 @@ class VirtualCardController extends Controller
 
         return $transactions;
     }
+
+    /**
+     * Return transactions for a virtual card filtered by user email
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getTransactions(Request $request): JsonResponse
+    {
+        try {
+            $email = $request->query('email');
+            if (!$email) {
+                return response()->json(['success' => false, 'message' => 'Email parameter required'], 400);
+            }
+
+            $card = VirtualCard::where('email', $email)->first();
+            if (!$card) {
+                return response()->json(['success' => true, 'data' => []]);
+            }
+
+            $transactions = VirtualCardTransaction::where('virtual_card_id', $card->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return response()->json(['success' => true, 'data' => $transactions]);
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch transactions: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to fetch transactions'], 500);
+        }
+    }
 }

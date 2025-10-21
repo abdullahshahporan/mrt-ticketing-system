@@ -13,6 +13,7 @@ use App\Http\Controllers\Support\HelpCenterController;
 use App\Http\Controllers\Support\ContactUsController;
 use App\Http\Controllers\Support\TermsOfServiceController;
 use App\Http\Controllers\Support\PrivacyPolicyController;
+use App\Http\Controllers\VirtualCardController;
 
 // Main application routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -107,9 +108,25 @@ Route::prefix('api')->group(function () {
     Route::post('/support/privacy-policy/accept', [PrivacyPolicyController::class, 'acceptPolicy'])->name('api.support.privacy.accept');
 });
 
+
+// Admin auth routes (simple cookie-based admin login)
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\Admin\AdminOverviewController;
+
+Route::get('/admin-login', [HomeController::class, 'index'])->name('admin.login');
+Route::post('/admin-login', [AdminAuthController::class, 'login'])->name('admin.login.post');
+Route::post('/admin-logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+Route::get('/admin-dashboard', [AdminAuthController::class, 'dashboard'])->name('admin.dashboard');
+
+// Admin routes
+Route::get('/admin/overview-stats', [AdminOverviewController::class, 'stats']);
+
 // Simple verification endpoints - NO CSRF
 Route::post('/simple-verify', [App\Http\Controllers\SimpleVerifyController::class, 'verify']);
 Route::get('/test-verify/{pnr}', [App\Http\Controllers\SimpleVerifyController::class, 'verify']);
 
 // Catch-all route for React Router (should be last)
 Route::get('/{any}', [HomeController::class, 'index'])->where('any', '.*');
+
+// Virtual Card transactions route
+Route::post('/virtual-card/transactions', [VirtualCardController::class, 'transactions'])->middleware('virtualcard');

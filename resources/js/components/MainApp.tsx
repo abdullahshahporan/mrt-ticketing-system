@@ -8,12 +8,16 @@ import VerifyTicket from '../pages/VerifyTicket';
 import OneTimeTicket from '../pages/OneTimeTicket';
 import InstantBooking from '../pages/InstantBooking';
 import ScheduleBooking from '../pages/ScheduleBooking';
+import BookingConfirmation from '../pages/BookingConfirmation';
 import FareCalculator from '../pages/FareCalculator';
 import RouteMap from '../pages/RouteMap';
 import VirtualCard from '../pages/VirtualCard';
 import VirtualCardDashboard from '../pages/VirtualCardDashboard';
+import VirtualCardTransactions from '../pages/VirtualCardTransactions';
 import Payment from './virtualcard/Payment';
 import SignIn from '../pages/SignIn';
+import AdminLogin from '../pages/AdminLogin';
+import AdminDashboard from '../pages/AdminDashboard';
 import OneTimeTicketCard from './cards/OneTimeTicketCard';
 import VirtualMRTCard from './cards/VirtualMRTCard';
 
@@ -246,6 +250,7 @@ export const MainApp: React.FC = () => {
             <Route path="/one-time-ticket" element={<OneTimeTicket />} />
             {/* Canonical path for instant booking (server-side routes point here) */}
             <Route path="/one-time-ticket/instant" element={<InstantBooking />} />
+            <Route path="/booking-confirmation" element={<BookingConfirmation />} />
             {/* Compatibility redirect: old path -> canonical path */}
             <Route path="/instant-booking" element={<Navigate to="/one-time-ticket/instant" replace />} />
             {/* Canonical path for schedule booking */}
@@ -257,12 +262,15 @@ export const MainApp: React.FC = () => {
             <Route path="/route-info" element={<RouteMap />} />
             <Route path="/virtual-card" element={<VirtualCard />} />
             <Route path="/virtual-card-dashboard" element={<VirtualCardDashboard />} />
+            <Route path="/virtual-card/transactions" element={<VirtualCardTransactions />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/signin" element={<SignIn />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/help-center" element={<HelpCenter />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
           </Routes>
         </main>
         
