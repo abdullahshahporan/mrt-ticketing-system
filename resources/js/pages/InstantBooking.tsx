@@ -99,8 +99,19 @@ const InstantBooking: React.FC = () => {
 
       const data = await response.json();
       if (data.success) {
-        // Use new QR service for all tickets
-        if (data.base_pnr && data.quantity && data.quantity > 1) {
+        // Always use the tickets array if present for QR generation
+        if (Array.isArray(data.tickets) && data.tickets.length > 0) {
+          // Generate a QR for each ticket PNR
+          const qrData = data.tickets.map((pnr: string, idx: number) => ({
+            ticketPNR: pnr,
+            from: data.from_station || fromStation,
+            to: data.to_station || toStation,
+            price: data.price || totalFare,
+            validity: data.validity || 'Valid for 1 hour'
+          }));
+          await downloadTicketQRs(qrData);
+        } else if (data.base_pnr && (data.quantity && data.quantity > 1)) {
+          // fallback: use basePNR and quantity if tickets array missing
           await downloadTicketQRsFromBase(
             data.base_pnr,
             data.quantity,

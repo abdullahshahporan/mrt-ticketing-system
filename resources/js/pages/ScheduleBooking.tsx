@@ -51,10 +51,10 @@ const ScheduleBooking: React.FC = () => {
           }));
           await downloadTicketQRs(qrData);
         }
-        // Navigate to confirmation page with PNR (show first PNR)
+        // Navigate to confirmation page with base PNR (show base PNR, not just first ticket)
         navigate('/booking-confirmation', {
           state: {
-            pnr: data.tickets && data.tickets.length > 0 ? data.tickets[0] : undefined,
+            pnr: data.base_pnr || (data.tickets && data.tickets.length > 0 ? data.tickets[0] : undefined),
             message: 'Your schedule booking is confirmed. Please save your PNR for future reference.'
           }
         });

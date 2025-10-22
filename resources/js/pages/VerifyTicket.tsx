@@ -340,7 +340,7 @@ const VerifyTicket: React.FC = () => {
                         <div className="mt-3 p-3 bg-white rounded border border-blue-300">
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-semibold text-blue-700">Time Remaining:</span>
-                            <span className="text-lg font-bold text-blue-600">{verificationResult.booking.minutes_remaining} minutes</span>
+                            <span className="text-lg font-bold text-blue-600">{Math.floor(verificationResult.booking.minutes_remaining)} minutes</span>
                           </div>
                           <div className="mt-2 h-2 bg-blue-100 rounded-full overflow-hidden">
                             <div 
