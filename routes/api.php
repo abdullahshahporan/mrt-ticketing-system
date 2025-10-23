@@ -26,6 +26,9 @@ use App\Http\Controllers\Admin\AdminProfileController;
 Route::post('/admin/profile', [AdminProfileController::class, 'store']);
 Route::get('/admin/profile/{id}', [AdminProfileController::class, 'show']);
 
+// User profile creation route
+Route::post('/profile', [ProfileController::class, 'store']);
+
 // Payment routes
 Route::get('/payment/options', [PaymentController::class, 'getPaymentOptions']);
 Route::post('/payment/process', [PaymentController::class, 'processPayment']);
