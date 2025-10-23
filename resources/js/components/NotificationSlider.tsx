@@ -6,8 +6,7 @@ const NotificationSlider: React.FC = () => {
   const notifications = [
     "Emergency Helpline: 16263 | Available 24/7 for immediate assistance and safety support",
     "Service Update: Regular maintenance scheduled every Sunday 2:00 AM - 4:00 AM for optimal performance", 
-    "Customer Care: 09666778899 | For booking support, inquiries, and technical assistance",
-    "Real-time Updates: Check our mobile app for live train schedules, platform information, and service alerts"
+    "Customer Care: 09666778899 | For booking support, inquiries, and technical assistance"
   ];
 
   // Create a continuous string with all notifications separated by icons

@@ -102,10 +102,18 @@ const SignInScreen: React.FC<SignInScreenProps> = ({ onBackToSignUp, onSignInSuc
     setShowPassword(!showPassword);
   };
 
-  const handleForgotPassword = () => {
+  const handleForgotPassword = async () => {
     if (formData.email) {
-      // TODO: Implement forgot password functionality
-      alert(`Password reset email would be sent to: ${formData.email}`);
+      try {
+        const message = await AuthService.resetPassword(formData.email);
+        alert(message); // Or show a toast/snackbar
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(error.message);
+        } else {
+          alert('Failed to send password reset email. Please try again.');
+        }
+      }
     } else {
       alert('Please enter your email address first');
     }
